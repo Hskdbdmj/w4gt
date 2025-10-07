@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>نهاد جبار — واجهة إدخال الهاتف</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+    :root{
+      --bg1:#07070a; --bg2:#09101a; --card:#0d1320; --neon:#00e6a8; --gold:#ffd24d; --muted:#98a3b3;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Cairo',system-ui,Segoe UI,Roboto,Arial;color:#e6eef6;background:radial-gradient(1200px 600px at 10% 10%, rgba(0,230,168,0.04), transparent), linear-gradient(180deg,var(--bg1),var(--bg2));}
+
+    .container{max-width:980px;margin:40px auto;padding:26px;}
+
+    header{display:flex;align-items:center;gap:18px;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.7)}
+    .brand{display:flex;flex-direction:column}
+    .brand h1{margin:0;font-size:22px;color:var(--neon);text-shadow:0 0 18px rgba(0,230,168,0.12);letter-spacing:1px;font-weight:900}
+    .brand p{margin:4px 0 0;color:var(--muted);font-weight:700}
+
+    .flag{width:56px;height:36px;border-radius:8px;background:linear-gradient(#ce1126 0 33%, #fff 33% 66%, #0b6623 66% 100%);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#0b6623;box-shadow:0 6px 20px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+
+    .panel{margin-top:22px;background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 20px 40px rgba(3,7,20,0.7)}
+
+    .top-row{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .left{flex:1}
+
+    label{display:block;color:#dfe9f5;font-weight:800;margin-bottom:8px}
+    input[type=tel]{width:100%;padding:14px 16px;border-radius:12px;background:#07101a;border:1px solid rgba(255,255,255,0.03);color:#e7f7f2;font-size:16px;outline:none}
+    input[type=tel]:focus{box-shadow:0 0 28px rgba(0,230,168,0.08);border-color:rgba(0,230,168,0.4)}
+
+    .controls{display:flex;gap:12px;align-items:center}
+    .btn{cursor:pointer;border-radius:12px;padding:12px 16px;font-weight:900;border:none}
+    .btn-primary{background:linear-gradient(90deg,var(--neon),#00b3ff);color:#001217;box-shadow:0 12px 30px rgba(0,230,168,0.12)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    .progress-wrap{margin-top:18px}
+    .progress{height:14px;background:rgba(255,255,255,0.02);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .bar{height:100%;width:0;background:linear-gradient(90deg,var(--neon),#00b3ff);box-shadow:0 0 24px rgba(0,230,168,0.15)}
+
+    .logs{margin-top:18px;background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(255,255,255,0.01));padding:12px;border-radius:12px;height:250px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:13px;color:#dfffe8}
+    .logs .time{color:var(--muted);margin-left:8px}
+    .log-ok{color:#a8ffd6}
+    .log-warn{color:#ffe6a1}
+    .log-err{color:#ff9b9b}
+
+    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-weight:700}
+
+    /* subtle small disclaimer in footer (kept for safety/compliance) */
+    .disclaimer{font-size:12px;color:rgba(255,255,255,0.12);}
+
+    @media(max-width:760px){.top-row{flex-direction:column;align-items:stretch}.controls{justify-content:space-between}}
+
+    /* visual polish */
+    .badge{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,210,77,0.12),rgba(0,230,168,0.04));color:var(--gold);font-weight:900;border:1px solid rgba(255,210,77,0.08)}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>نهاد جبار</h1>
+        <p>واجهة إدخال الهاتف • تصميم عراقي عصري</p>
+      </div>
+      <div style="flex:1"></div>
+      <div class="flag" title="روح عراقية"></div>
+    </header>
+
+    <section class="panel">
+      <div class="top-row">
+        <div class="left">
+          <span class="badge">وحدة التحكم • Control Hub</span>
+          <div style="height:12px"></div>
+
+          <label for="phone">أدخل رقم الهاتف</label>
+          <input id="phone" type="tel" placeholder="مثال: 07xx xxx xxxx" autocomplete="tel" />
+
+          <div style="height:12px"></div>
+          <div class="controls">
+            <button id="start" class="btn btn-primary">تنفيذ</button>
+            <button id="reset" class="btn btn-ghost">إعادة تعيين</button>
+          </div>
+
+          <div class="progress-wrap">
+            <div style="margin-top:8px;font-weight:800;color:var(--muted)">التقدم</div>
+            <div class="progress"><div id="bar" class="bar"></div></div>
+          </div>
+        </div>
+
+        <div style="width:300px;min-width:240px">
+          <div style="font-weight:900;color:var(--gold);margin-bottom:10px">سجل العملية</div>
+          <div id="logs" class="logs" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>المطور: <strong>نهاد</strong> — تصميم عصري نيوني</div>
+        <div class="disclaimer">© 2025 — عرض بصري فقط</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const phone = document.getElementById('phone');
+    const start = document.getElementById('start');
+    const reset = document.getElementById('reset');
+    const logs = document.getElementById('logs');
+    const bar = document.getElementById('bar');
+
+    function appendLog(text, cls=''){
+      const d = document.createElement('div');
+      const time = new Date().toLocaleTimeString();
+      d.innerHTML = `<span class=\"time\">[${time}]</span> ${text}`;
+      if(cls) d.classList.add(cls);
+      logs.appendChild(d);
+      logs.scrollTop = logs.scrollHeight;
+    }
+
+    function setProgress(p){ bar.style.width = Math.max(0,Math.min(100,p)) + '%'; }
+
+    reset.addEventListener('click', ()=>{
+      phone.value = '';
+      logs.innerHTML = '';
+      setProgress(0);
+      appendLog('إعادة تعيين النموذج.');
+    });
+
+    start.addEventListener('click', ()=>{
+      logs.innerHTML = '';
+      setProgress(2);
+      const num = phone.value.trim() || 'غير محدد';
+      appendLog('استلام الرقم: ' + num, 'log-warn');
+
+      const steps = [
+        ['تهيئة وحدات النظام...', 'log-ok'],
+        ['فحص متطلبات الأداء...', 'log-ok'],
+        ['إنشاء قناة اتصال محلية...', 'log-ok'],
+        ['كتابة سجلات النشاط...', 'log-ok'],
+        ['بدء عملية المعالجة...', 'log-warn'],
+        ['تنفيذ تسلسل الأوامر...', 'log-ok'],
+        ['إنهاء التسلسل وإنتاج التقرير النهائي...', 'log-ok']
+      ];
+
+      let idx = 0; let p = 4;
+      const t = setInterval(()=>{
+        p += Math.random()*8 + 4;
+        setProgress(p);
+        if(p >= (idx+1)*(100/steps.length)){
+          appendLog(steps[idx][0], steps[idx][1]);
+          idx++;
+        }
+        if(p >= 100){
+          clearInterval(t);
+          setProgress(100);
+          appendLog('تمت العملية بنجاح. استمتع.', 'log-ok');
+          // big visual success
+          const big = document.createElement('div');
+          big.style.marginTop = '12px';
+          big.style.padding = '12px';
+          big.style.borderRadius = '10px';
+          big.style.background = 'linear-gradient(90deg, rgba(0,230,168,0.06), rgba(255,210,77,0.02))';
+          big.style.fontWeight = '900';
+          big.style.color = '#eafaf0';
+          big.textContent = 'تمت الفرمته — استمتع';
+          logs.appendChild(big);
+          logs.scrollTop = logs.scrollHeight;
+        }
+      }, 420);
+    });
+
+    // initial hint
+    appendLog('جاهز. أدخل رقم الهاتف ثم اضغط "تنفيذ".', 'log-warn');
+  </script>
+</body>
+</html>

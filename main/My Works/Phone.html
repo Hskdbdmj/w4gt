@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>محاكاة هاتف Android 11 - نهاد</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: #000;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .scene {
+      width: 100vw;
+      height: 100vh;
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #080a0f, #020305);
+    }
+    .phone {
+      width: 320px;
+      height: 640px;
+      border-radius: 35px;
+      background: #f0f0f0;
+      box-shadow: 0 0 40px #00fff7aa;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: background-color 0.4s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone.dark {
+      background: #121212;
+      color: #eee;
+      box-shadow: 0 0 50px #00e7ffdd;
+    }
+    /* الشاشة */
+    .screen {
+      flex: 1;
+      background: #fff;
+      border-radius: 25px;
+      margin: 10px 10px 15px 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      color: #000;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .phone.dark .screen {
+      background: #222;
+      color: #eee;
+    }
+    /* شريط الحالة */
+    .status-bar {
+      height: 32px;
+      background: rgba(0, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      user-select: none;
+      border-bottom: 1px solid rgba(0,255,255,0.2);
+      letter-spacing: 1px;
+      text-shadow: 0 0 4px #00fff7aa;
+    }
+    /* شاشة القفل */
+    #lockScreen {
+      flex: 1;
+      background: linear-gradient(135deg, #0ff, #006060);
+      color: #0ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+      user-select: none;
+    }
+    #lockScreen input[type="password"] {
+      margin-top: 20px;
+      font-size: 22px;
+      padding: 10px 15px;
+      width: 160px;
+      border-radius: 14px;
+      border: none;
+      outline: none;
+      text-align: center;
+      background: #004040;
+      color: #0ff;
+      box-shadow: 0 0 15px #0ff;
+      letter-spacing: 6px;
+      font-weight: bold;
+      caret-color: #0ff;
+    }
+    #lockScreen button {
+      margin-top: 15px;
+      padding: 8px 25px;
+      font-size: 18px;
+      border-radius: 14px;
+      border: none;
+      background: #00ffff;
+      color: #004040;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffffaa;
+      transition: background-color 0.3s ease;
+    }
+    #lockScreen button:hover {
+      background: #008080;
+      color: #0ff;
+    }
+    /* التطبيقات */
+    #homeScreen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      padding: 12px;
+    }
+    #homeScreen.active {
+      display: flex;
+    }
+    .appsGrid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    .app {
+      background: linear-gradient(135deg, #00e7ff, #006b6b);
+      border-radius: 18px;
+      box-shadow: 0 0 10px #00ffffaa;
+      color: #002f2f;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+      padding: 10px 5px;
+      text-align: center;
+      height: 90px;
+    }
+    .app:hover {
+      background: linear-gradient(135deg, #00ffff, #004f4f);
+      color: #aaffff;
+      box-shadow: 0 0 20px #00ffffcc;
+    }
+    .app span {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+    /* شريط التطبيقات السفلي */
+    #dock {
+      height: 48px;
+      background: rgba(0,255,255,0.15);
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      box-shadow: inset 0 2px 6px rgba(0,255,255,0.4);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      user-select: none;
+      color: #004040;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: default;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .phone.dark #dock {
+      background: rgba(0,255,255,0.3);
+      color: #aaffff;
+      box-shadow: inset 0 2px 10px rgba(0,255,255,0.7);
+    }
+    /* نافذة التطبيق المفتوح */
+    #appWindow {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 60px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 0 30px #00ffffbb;
+      padding: 20px;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      color: #002f2f;
+      user-select: text;
+      z-index: 100;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .phone.dark #appWindow {
+      background: #004040;
+      color: #aaffff;
+      box-shadow: 0 0 40px #00ffffee;
+    }
+    #appWindow h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-weight: 900;
+      text-align: center;
+    }
+    #appWindow p {
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    #closeAppBtn {
+      margin-top: auto;
+      align-self: center;
+      padding: 8px 24px;
+      background: #00ffff;
+      border: none;
+      border-radius: 12px;
+      color: #004040;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00ffffcc;
+      transition: background-color 0.3s ease;
+    }
+    #closeAppBtn:hover {
+      background: #008080;
+      color: #c0ffff;
+    }
+    /* زر تبديل الوضع */
+    #themeToggle {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 7px 14px;
+      background: #00ffff;
+      color: #004040;
+      font-weight: 700;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00ffffcc;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      z-index: 110;
+    }
+    #themeToggle:hover {
+      background: #008080;
+      color: #c0ffff;
+    }
+    /* خلفية الجهاز */
+    .backside {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 35px;
+      background: url("https://i.ibb.co/qYjH6Bp/infinix-note-50-back.jpg") no-repeat center center;
+      background-size: cover;
+      box-shadow: 0 0 30px #00ffffbb inset;
+      pointer-events: none;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="scene">
+  <div id="themeToggle">الوضع الداكن</div>
+  <div class="phone" id="phone">
+    <!-- شاشة -->
+    <div class="screen" id="screen">
+
+      <!-- شاشة القفل -->
+      <div id="lockScreen">
+        <div>أدخل رمز PIN لفتح الجهاز</div>
+        <input type="password" maxlength="4" id="pinInput" inputmode="numeric" autocomplete="off" autofocus />
+        <button id="unlockBtn">فتح</button>
+      </div>
+
+      <!-- الشاشة الرئيسية -->
+      <div id="homeScreen">
+        <div class="status-bar">Android 11 | المطوّر: نهاد</div>
+        <div class="appsGrid" id="appsGrid">
+          <div class="app" data-app="الهاتف"><span>📞</span>الهاتف</div>
+          <div class="app" data-app="الكاميرا"><span>📷</span>الكاميرا</div>
+          <div class="app" data-app="الإعدادات"><span>⚙️</span>الإعدادات</div>
+          <div class="app" data-app="المعرض"><span>🖼️</span>المعرض</div>
+          <div class="app" data-app="المتصفح"><span>🌐</span>المتصفح</div>
+          <div class="app" data-app="الرسائل"><span>💬</span>الرسائل</div>
+          <div class="app" data-app="الساعة"><span>⏰</span>الساعة</div>
+          <div class="app" data-app="الملاحظات"><span>📝</span>الملاحظات</div>
+          <div class="app" data-app="المتجر"><span>🛒</span>المتجر</div>
+        </div>
+        <div id="dock">نهاد</div>
+      </div>
+
+      <!-- نافذة التطبيق المفتوح -->
+      <div id="appWindow">
+        <h2 id="appTitle">عنوان التطبيق</h2>
+        <p id="appContent">محتوى التطبيق سيظهر هنا.</p>
+        <button id="closeAppBtn">إغلاق التطبيق</button>
+      </div>
+
+    </div>
+
+    <!-- الخلفية -->
+    <div class="backside"></div>
+  </div>
+</div>
+
+<script>
+  const phone = document.getElementById("phone");
+  const themeToggle = document.getElementById("themeToggle");
+  const lockScreen = document.getElementById("lockScreen");
+  const homeScreen = document.getElementById("homeScreen");
+  const pinInput = document.getElementById("pinInput");
+  const unlockBtn = document.getElementById("unlockBtn");
+  const appWindow = document.getElementById("appWindow");
+  const appTitle = document.getElementById("appTitle");
+  const appContent = document.getElementById("appContent");
+  const closeAppBtn = document.getElementById("closeAppBtn");
+  const appsGrid = document.getElementById("appsGrid");
+
+  let isDark = false;
+  let rotateY = 0;
+  let shiftDown = false;
+  let lastX = 0;
+
+  // تبديل الوضع الفاتح/الداكن
+  themeToggle.onclick = () => {
+    isDark = !isDark;
+    phone.classList.toggle("dark");
+    themeToggle.textContent = isDark ? "الوضع الفاتح" : "الوضع الداكن";
+  };
+
+  // فتح التطبيق عند الضغط على أيقونة
+  appsGrid.addEventListener("click", e => {
+    const appDiv = e.target.closest(".app");
+    if (!appDiv) return;
+
+    const appName = appDiv.getAttribute("data-app");
+    openApp(appName);
+  });
+
+  function openApp(name) {
+    lockScreen.style.display = "none";
+    homeScreen.style.display = "none";
+    appWindow.style.display = "flex";
+    appTitle.textContent = name;
+
+    // محتوى وهمي لكل تطبيق
+    const contents = {
+      "الهاتف": "تطبيق الهاتف - هنا يمكنك إجراء مكالمات وهمية.",
+      "الكاميرا": "تطبيق الكاميرا - التقط صورًا وهمية مع جودة عالية.",
+      "الإعدادات": "الإعدادات - تحكم في إعدادات الجهاز.",
+      "المعرض": "المعرض - شاهد صورك الوهمية هنا.",
+      "المتصفح": "المتصفح - تصفح الإنترنت بسرعة وهمية.",
+      "الرسائل": "الرسائل - أرسل واستقبل رسائل وهمية.",
+      "الساعة": "الساعة - ضبط المنبه وعرض الوقت الحالي.",
+      "الملاحظات": "الملاحظات - دون ملاحظاتك الخاصة.",
+      "المتجر": "المتجر - تصفح تطبيقات جديدة وقم بتنزيلها.",
+    };
+
+    appContent.textContent = contents[name] || "تطبيق وهمي";
+  }
+
+  // إغلاق التطبيق المفتوح
+  closeAppBtn.onclick = () => {
+    appWindow.style.display = "none";
+    homeScreen.style.display = "flex";
+  };
+
+  // فتح الجهاز عبر إدخال PIN
+  unlockBtn.onclick = tryUnlock;
+  pinInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") tryUnlock();
+  });
+
+  function tryUnlock() {
+    if (pinInput.value === "1234") {
+      lockScreen.style.display = "none";
+      homeScreen.style.display = "flex";
+      pinInput.value = "";
+    } else {
+      alert("رمز PIN خاطئ! حاول مرة أخرى.");
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  }
+
+  // تحريك الجهاز 360 درجة مع الضغط على Shift وتحريك الماوس
+  document.addEventListener("keydown", e => {
+    if (e.key === "Shift") shiftDown = true;
+  });
+  document.addEventListener("keyup", e => {
+    if (e.key === "Shift") shiftDown = false;
+  });
+  document.addEventListener("mousemove", e => {
+    if (shiftDown) {
+      const delta = e.clientX - lastX;
+      rotateY += delta * 0.5;
+      phone.style.transform = `rotateY(${rotateY}deg)`;
+    }
+    lastX = e.clientX;
+  });
+</script>
+
+</body>
+</html>
