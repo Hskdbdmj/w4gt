@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>🏆 جائزة عراقية شبابية</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #111 0%, #000 100%);
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 40px;
+      color: #ffd700;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 20px;
+      color: #ffd700;
+      text-shadow: 0 0 20px #ff0000, 0 0 40px #00ff00;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .trophy {
+      width: 280px;
+      margin: 20px auto;
+      border-radius: 20px;
+      animation: glow 4s infinite alternate;
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+    }
+
+    @keyframes glow {
+      from { transform: scale(1); filter: brightness(1) drop-shadow(0 0 20px #ffd700); }
+      to { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 35px #ff0000); }
+    }
+
+    p {
+      font-size: 22px;
+      margin: 12px 0;
+      color: #eee;
+      text-shadow: 0 0 8px #444;
+      animation: fadeInText 2.5s ease-in-out;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .footer {
+      margin-top: 35px;
+      font-size: 20px;
+      color: #ccc;
+      text-shadow: 0 0 5px #000;
+      border-top: 1px solid #444;
+      padding-top: 15px;
+    }
+
+    .flag {
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 12px #ff0000, 0 0 12px #00ff00;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏆 جائزة عراقية شبابية</h1>
+  <img class="trophy" src="https://pngimg.com/uploads/trophy/trophy_PNG88.png" alt="كأس ذهبي واقعي">
+  <p>إلى الصديق الغالي: <strong>بنيامين</strong></p>
+  <p>الوصف: أحسن صديق وبلاع عير</p>
+
+  <div class="footer">
+    مقدمة من صديقك الوفي: <strong>مشمش</strong>
+  </div>
+
+  <div class="flag">🇮🇶 تصميم عراقي واقعي 🇮🇶</div>
+
+</body>
+</html>

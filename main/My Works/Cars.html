@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>لعبة سباق سيارات - نهاد | Nihad</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    #gameCanvas {
+      display: block;
+      margin: 0 auto;
+      background: #222;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #00ffccaa;
+      border: 4px solid #00ffcc;
+    }
+    #loseScreen {
+      display: none;
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #00ffcc;
+      font-size: 36px;
+      font-weight: bold;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      z-index: 10;
+    }
+    #restartBtn {
+      margin-top: 20px;
+      padding: 10px 30px;
+      font-size: 20px;
+      font-weight: bold;
+      background: #00ffcc;
+      color: #111;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffccaa;
+      transition: background 0.3s ease;
+    }
+    #restartBtn:hover {
+      background: #00dddd;
+    }
+    #restartIcon {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <div id="loseScreen">
+    <div>YOU LOSE!</div>
+    <button id="restartBtn"><span id="restartIcon">🔄</span>Restart</button>
+  </div>
+  <div id="copyright" style="color:#00ffcc;text-align:center;font-weight:bold;margin-top:8px;font-family:monospace;font-size:16px;letter-spacing:1.2px;">
+    © 2025 نهاد | Nihad
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const car = { x: 175, y: 500, width: 50, height: 100, color: "#00aaff" };
+    const enemy = { x: Math.random() * 350, y: -100, width: 50, height: 100, color: "#ff3333", speed: 5 };
+
+    let keys = {};
+    let isGameOver = false;
+
+    function drawCar(obj) {
+      ctx.fillStyle = obj.color;
+      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillRect(obj.x + 10, obj.y + 20, obj.width - 20, 30);
+      ctx.fillStyle = '#222';
+      ctx.fillRect(obj.x + 5, obj.y + 5, 10, 20);
+      ctx.fillRect(obj.x + obj.width - 15, obj.y + 5, 10, 20);
+      ctx.fillRect(obj.x + 5, obj.y + obj.height - 25, 10, 20);
+      ctx.fillRect(obj.x + obj.width - 15, obj.y + obj.height - 25, 10, 20);
+      ctx.fillStyle = '#555';
+      ctx.beginPath(); ctx.arc(obj.x + 10, obj.y + 15, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(obj.x + obj.width - 10, obj.y + 15, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(obj.x + 10, obj.y + obj.height - 15, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(obj.x + obj.width - 10, obj.y + obj.height - 15, 5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    function update() {
+      if (isGameOver) return;
+      if (keys["ArrowLeft"] && car.x > 50) car.x -= 5;
+      if (keys["ArrowRight"] && car.x + car.width < canvas.width - 50) car.x += 5;
+      enemy.y += enemy.speed;
+      if (enemy.y > canvas.height) {
+        enemy.y = -100;
+        enemy.x = Math.random() * (canvas.width - enemy.width);
+      }
+      if (
+        car.x < enemy.x + enemy.width &&
+        car.x + car.width > enemy.x &&
+        car.y < enemy.y + enemy.height &&
+        car.y + car.height > enemy.y
+      ) {
+        gameOver();
+      }
+    }
+
+    function drawRoad() {
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, 50, canvas.height);
+      ctx.fillRect(canvas.width - 50, 0, 50, canvas.height);
+      ctx.fillStyle = '#333';
+      ctx.fillRect(50, 0, canvas.width - 100, canvas.height);
+      ctx.fillStyle = '#00ffcc';
+      for (let i = 0; i < canvas.height; i += 40) {
+        ctx.fillRect(canvas.width / 2 - 6, i, 12, 20);
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawRoad();
+      drawCar(car);
+      drawCar(enemy);
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      if (!isGameOver) requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver() {
+      isGameOver = true;
+      document.getElementById("loseScreen").style.display = "block";
+    }
+
+    document.addEventListener("keydown", (e) => keys[e.key] = true);
+    document.addEventListener("keyup", (e) => keys[e.key] = false);
+
+    document.getElementById("restartBtn").addEventListener("click", () => {
+      car.x = 175;
+      enemy.y = -100;
+      enemy.x = Math.random() * (canvas.width - enemy.width);
+      isGameOver = false;
+      document.getElementById("loseScreen").style.display = "none";
+      gameLoop();
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>

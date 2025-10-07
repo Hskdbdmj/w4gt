@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ashford Story - متجر الحسابات واليوزرات المميزة</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #5D4037, #8D6E63);
+      color: #f0ece3;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      background: #3E2723;
+      width: 100%;
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom: 4px solid #D7CCC8;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #FFD54F;
+      letter-spacing: 2px;
+      text-shadow: 1px 1px 3px #4E342E;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 1.3rem;
+      color: #E0C097;
+      font-weight: 500;
+      font-style: italic;
+      text-shadow: 1px 1px 2px #6D4C41;
+    }
+
+    main {
+      max-width: 900px;
+      width: 95%;
+      margin: 40px 0 80px;
+      padding: 0 15px;
+      flex-grow: 1;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: #6D4C41cc;
+      border-radius: 16px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+      padding: 25px 30px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -30%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, #FFD54F 0%, transparent 60%);
+      opacity: 0.2;
+      transform: rotate(25deg);
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .product-card:hover::before {
+      opacity: 0.4;
+    }
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 14px 25px rgba(0,0,0,0.7);
+    }
+
+    .product-title {
+      font-size: 1.7rem;
+      margin-bottom: 14px;
+      font-weight: 700;
+      color: #FFF8E1;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.6px;
+      text-shadow: 1px 1px 2px #3E2723;
+    }
+
+    .product-desc {
+      font-size: 1.05rem;
+      color: #E0C097;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      z-index: 1;
+      position: relative;
+    }
+
+    .product-price {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #FFD54F;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      z-index: 1;
+      position: relative;
+      text-shadow: 1px 1px 3px #4E342E;
+    }
+
+    .buy-button {
+      display: inline-block;
+      background: #D7CCC8;
+      color: #5D4037;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      box-shadow: 0 6px 12px #BCAAA4;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .buy-button:hover {
+      background: #FFD54F;
+      color: #3E2723;
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px #FFEB3B;
+    }
+
+    .owners {
+      background: #3E2723;
+      border-radius: 16px;
+      padding: 30px 25px;
+      max-width: 900px;
+      width: 95%;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      text-align: center;
+      color: #FFD54F;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
+
+    .owners h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px #6D4C41;
+    }
+    .owners a {
+      color: #FFECB3;
+      text-decoration: none;
+      font-size: 1.4rem;
+      margin: 0 15px;
+      padding: 8px 18px;
+      background: #5D4037cc;
+      border-radius: 30px;
+      box-shadow: 0 3px 10px #3E2723;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .owners a:hover {
+      background: #FFD54F;
+      color: #3E2723;
+      box-shadow: 0 4px 15px #FFEB3B;
+    }
+
+    footer {
+      width: 100%;
+      background: #3E2723;
+      padding: 20px 15px;
+      text-align: center;
+      color: #BCAAA4;
+      font-size: 0.95rem;
+      box-shadow: inset 0 1px 3px #5D4037;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      .product-card {
+        padding: 20px 18px;
+      }
+      .product-title {
+        font-size: 1.4rem;
+      }
+      .owners h2 {
+        font-size: 1.6rem;
+      }
+      .owners a {
+        font-size: 1.1rem;
+        margin: 0 8px;
+        padding: 6px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ashford Story</h1>
+    <p>متجر الحسابات القديمة واليوزرات المميزة في إنستغرام</p>
+  </header>
+
+  <main>
+    <section class="products">
+      <article class="product-card">
+        <h2 class="product-title">حساب إنستغرام إنشاء 2013</h2>
+        <p class="product-desc">حساب إنستغرام أنشئ في عام 2013، فرصة نادرة ومميزة.</p>
+        <div class="product-price">السعر: 25,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">حساب إنستغرام إنشاء 2012</h2>
+        <p class="product-desc"></p>
+        <div class="product-price">السعر 20,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">يوزرات إنستغرام مميزة حسب الطلب</h2>
+        <p class="product-desc">يوزرات مميزة وفريدة حسب طلبك، تبدأ الأسعار من 5,000 دينار عراقي وتصل حتى 15,000 دينار عراقي.</p>
+        <div class="product-price">الأسعار تبدأ من 5,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">ألعاب مهكرة للتلفون</h2>
+        <p class="product-desc">ألعاب مهكرة مميزة للتلفون، الأسعار تبدأ من 5,000 دينار عراقي وتصل حتى 20,000 دينار عراقي حسب اللعبة.</p>
+        <div class="product-price">الأسعار من 5,000 إلى 20,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">توثيق حسابات إنستغرام</h2>
+        <p class="product-desc">خدمة توثيق الحسابات على إنستغرام لضمان المصداقية والتميز.</p>
+        <div class="product-price">السعر: 25,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">انشاء موقع لمشروعك</h2>
+        <p class="product-desc">خدمة تصميم وإنشاء موقع إلكتروني لمشروعك بطريقة احترافية ومميزة.</p>
+        <div class="product-price">السعر: 10,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <!-- المنتجات الجديدة -->
+      <article class="product-card">
+        <h2 class="product-title">يوزرات تليكرام</h2>
+        <p class="product-desc">يوزرات تليكرام مميزة وفريدة.</p>
+        <div class="product-price">السعر: 5,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">رشق لايكات انستا</h2>
+        <p class="product-desc">خدمة رشق لايكات إنستغرام سريعة وآمنة.</p>
+        <div class="product-price">السعر: 10,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">يوزرات تويتر مميزة</h2>
+        <p class="product-desc">يوزرات تويتر مميزة وحصرية.</p>
+        <div class="product-price">السعر: 5,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <article class="product-card">
+        <h2 class="product-title">يوزرات تيك توك مميزة</h2>
+        <p class="product-desc">يوزرات تيك توك مميزة بأسعار منافسة.</p>
+        <div class="product-price">السعر: 5,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <!-- السلعة الجديدة: يوزرات سناب -->
+      <article class="product-card">
+        <h2 class="product-title">يوزرات سناب مميزة</h2>
+        <p class="product-desc">يوزرات سناب مميزة وفريدة بأسعار مناسبة.</p>
+        <div class="product-price">السعر: 5,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+
+      <!-- السلعة الجديدة: سبام SMS -->
+      <article class="product-card">
+        <h2 class="product-title">سبام SMS على أي رقم عراقي</h2>
+        <p class="product-desc">خدمة إرسال رسائل SMS متكررة لأي رقم عراقي.</p>
+        <div class="product-price">السعر: 15,000 دينار عراقي</div>
+        <a href="https://instagram.com/wg0.q" target="_blank" class="buy-button">اطلب الآن</a>
+      </article>
+    </section>
+  </main>
+
+  <section class="owners">
+    <h2>مالكين المتجر على إنستغرام</h2>
+    <a href="https://instagram.com/_8qdv" target="_blank">@_8qdv</a>
+    <a href="https://instagram.com/9qq_t" target="_blank">@9qq_t</a>
+  </section>
+
+  <footer>
+    &copy; 2025 Ashford Story - جميع الحقوق محفوظة
+  </footer>
+</body>
+</html>

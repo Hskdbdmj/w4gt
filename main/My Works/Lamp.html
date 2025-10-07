@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مصباح أنيق</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.5s ease;
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+    }
+
+    .lamp-container {
+      position: relative;
+      width: 120px;
+      height: 300px;
+      cursor: pointer;
+    }
+
+    .lamp-top {
+      width: 120px;
+      height: 60px;
+      background: #444;
+      border-radius: 60px 60px 0 0;
+      position: relative;
+      z-index: 3;
+    }
+
+    .lamp-bulb {
+      width: 80px;
+      height: 100px;
+      background: #ccc;
+      border-radius: 50% 50% 45% 45%;
+      margin: -10px auto 0;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0);
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .lamp-wire {
+      width: 4px;
+      height: 80px;
+      background: #666;
+      margin: 0 auto;
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .light {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-top: 150px solid rgba(255, 255, 200, 0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .lamp-on .lamp-bulb {
+      background: #fffad1;
+      box-shadow: 0 0 40px #fff7a5;
+    }
+
+    .lamp-on .light {
+      opacity: 1;
+    }
+
+    .credit {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: #aaa;
+      font-size: 14px;
+      opacity: 0.6;
+      font-family: monospace;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lamp-container" id="lamp">
+    <div class="lamp-wire"></div>
+    <div class="lamp-top"></div>
+    <div class="lamp-bulb"></div>
+    <div class="light"></div>
+  </div>
+
+  <div class="credit">حقوق التصميم @4iczp
+  </div>
+
+  <script>
+    const lamp = document.getElementById('lamp');
+    lamp.addEventListener('click', () => {
+      lamp.classList.toggle('lamp-on');
+    });
+  </script>
+
+</body>
+</html>
+4
